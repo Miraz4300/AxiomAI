@@ -15,9 +15,9 @@ export interface UserState {
 export function defaultSetting(): UserState {
   return {
     userInfo: {
-      avatar: 'https://raw.githubusercontent.com/miraz4300/axiom-ai/main/src/assets/avatar.jpg',
+      avatar: 'https://raw.githubusercontent.com/miraz4300/AXIOM-AI/main/src/assets/avatar.jpg',
       name: 'Miraz Hossain',
-      description: 'Star on <a href="https://github.com/miraz4300/axiom-ai" class="text-blue-500" target="_blank" >Github</a>',
+      description: 'Star on <a href="https://github.com/miraz4300/AXIOM-AI" class="text-blue-500" target="_blank" >Github</a>',
     },
   }
 }

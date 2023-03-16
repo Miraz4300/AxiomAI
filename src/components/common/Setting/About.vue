@@ -43,15 +43,15 @@ onMounted(() => {
           This project is open sourced from
           <a
             class="text-blue-600 dark:text-blue-500"
-            href="https://github.com/miraz4300/axiom-ai"
+            href="https://github.com/miraz4300/AXIOM-AI"
             target="_blank"
           >
             Github
           </a>
-          ，Free and based on the MIT agreement, there is no payment of any kind!
+          ，Free and based on the MIT License agreement.
         </p>
         <p>
-          If you think this project is helpful to you, please give me a star on Github or give me a little sponsorship, thank you.
+          If you think this project is helpful to you, please give me a star on Github.
         </p>
       </div>
       <p>{{ $t("setting.api") }}：{{ config?.apiModel ?? '-' }}</p>
