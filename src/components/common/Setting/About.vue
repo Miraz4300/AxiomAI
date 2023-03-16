@@ -12,7 +12,7 @@ import pkg from '@/../package.json'
         This project is open sourced from
         <a
           class="text-blue-600 dark:text-blue-500"
-          href="https://github.com/miraz4300/AXIOM-AI"
+          href="https://github.com/miraz4300/AxiomAI"
           target="_blank"
         >
           Github
