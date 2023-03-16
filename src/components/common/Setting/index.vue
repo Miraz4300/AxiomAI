@@ -42,10 +42,10 @@ const show = computed({
             <General />
           </div>
         </NTabPane>
-        <NTabPane name="Config" tab="Config">
+        <NTabPane name="About" tab="About">
           <template #tab>
             <SvgIcon class="text-lg" icon="ri:list-settings-line" />
-            <span class="ml-2">{{ $t('setting.config') }}</span>
+            <span class="ml-2">{{ $t('setting.about') }}</span>
           </template>
           <About />
         </NTabPane>
