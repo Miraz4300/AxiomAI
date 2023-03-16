@@ -189,7 +189,7 @@ const importPromptTemplate = () => {
     message.success(t('common.importSuccess'))
   }
   catch {
-    message.error('JSON 格式错误，请检查 JSON 格式')
+    message.error('JSON format error, please check JSON format')
   }
 }
 
