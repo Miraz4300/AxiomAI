@@ -50,7 +50,7 @@ export default {
   setting: {
     setting: 'Setting',
     general: 'General',
-    config: 'Config',
+    about: 'About',
     avatarLink: 'Avatar Link',
     name: 'Name',
     description: 'Description',
