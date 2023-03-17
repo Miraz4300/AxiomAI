@@ -348,7 +348,7 @@ const dataSource = computed(() => {
                 {{ $t('common.import') }}
               </NButton>
               <NButton
-              size="small"
+                size="small"
                 :loading="exportLoading"
                 @click="exportPromptTemplate()"
               >
