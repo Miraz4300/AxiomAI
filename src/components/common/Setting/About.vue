@@ -35,34 +35,33 @@ onMounted(() => {
   <NSpin :show="loading">
     <div class="p-4 space-y-4">
       <h2 class="text-xl font-bold">
-        Version - {{ pkg.version }}
+        <center> AxiomAI </center>
       </h2>
-      <div class="p-2 space-y-2 rounded-md bg-neutral-100 dark:bg-neutral-700">
+      <div class="p-2 space-y-2 rounded-md bg-neutral-200 dark:bg-stone-700">
         <p>
-          This project is open sourced from
-          <a
-            class="text-blue-600 dark:text-blue-500"
-            href="https://github.com/Miraz4300/AxiomAI"
-            target="_blank"
-          >
-            GitHub
-          </a>
-          ，based on the MIT License agreement.
+          <center>
+            This is an open source project based on the MIT License agreement.
+          </center>
         </p>
         <p>
-          If you find this project helpful, please give me a Star on GitHub.
+          <center>
+            If you find this project helpful, please give me a Star on
+            <a
+              class="text-blue-600 dark:text-blue-500"
+              href="https://github.com/miraz4300/AxiomAI"
+              target="_blank"
+            >
+              GitHub.
+            </a>
+          </center>
         </p>
       </div>
-      <p>{{ $t("setting.api") }}：{{ config?.apiModel ?? '-' }}</p>
       <p v-if="isChatGPTAPI">
-        {{ $t("setting.balance") }}：{{ config?.balance ?? '-' }}
+        {{ $t("setting.api") }}：{{ config?.apiModel ?? '-' }} <br>
+        Model: GPT-3.5-turbo <br>
+        {{ $t("setting.balance") }}：{{ config?.balance ?? '-' }} <br>
+        Version: {{ pkg.version }} - preview
       </p>
-      <p v-if="!isChatGPTAPI">
-        {{ $t("setting.reverseProxy") }}：{{ config?.reverseProxy ?? '-' }}
-      </p>
-      <p>{{ $t("setting.timeout") }}：{{ config?.timeoutMs ?? '-' }}</p>
-      <p>{{ $t("setting.socks") }}：{{ config?.socksProxy ?? '-' }}</p>
-      <p>{{ $t("setting.httpsProxy") }}：{{ config?.httpsProxy ?? '-' }}</p>
     </div>
   </NSpin>
 </template>

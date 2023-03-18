@@ -32,7 +32,7 @@ export default {
     placeholderMobile: 'Ask me anything...',
     copy: 'Copy',
     copied: 'Copied',
-    copyCode: 'Copy Code',
+    copyCode: 'Copy code',
     clearChat: 'Clear Chat',
     clearChatConfirm: 'Are you sure to clear this chat?',
     exportImage: 'Export Image',
