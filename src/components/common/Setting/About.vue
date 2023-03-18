@@ -58,9 +58,9 @@ onMounted(() => {
       </div>
       <p v-if="isChatGPTAPI">
         {{ $t("setting.api") }}：{{ config?.apiModel ?? '-' }} <br>
-        Model: GPT-3.5-turbo <br>
+        Model：GPT-3.5-turbo <br>
         {{ $t("setting.balance") }}：{{ config?.balance ?? '-' }} <br>
-        Version: {{ pkg.version }} - preview
+        Version：{{ pkg.version }} - preview
       </p>
     </div>
   </NSpin>
