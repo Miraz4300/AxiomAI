@@ -43,8 +43,15 @@ const loading = ref<boolean>(false)
 
 // Add PromptStore
 const promptStore = usePromptStore()
+
 // Use storeToRefs to ensure that the associative part can be re-rendered after the store is modified
 const { promptList: promptTemplate } = storeToRefs<any>(promptStore)
+
+// If the page is refreshed for unknown reasons, the loading status will not be reset, so it can be reset manually.
+dataSources.value.forEach((item, index) => {
+  if (item.loading)
+    updateChatSome(+uuid, index, { loading: false })
+})
 
 function handleSubmit() {
   onConversation()
