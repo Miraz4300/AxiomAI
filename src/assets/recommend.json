@@ -1,8 +1,8 @@
 [
   {
-    "key": "chatgpt-prompt-collection",
-    "desc": "Nothing1024's collection of prompts",
-    "downloadUrl": "https://raw.githubusercontent.com/Nothing1024/chatgpt-prompt-collection/main/awesome-chatgpt-prompts-en.json",
-    "url": "https://github.com/Nothing1024/chatgpt-prompt-collection"
+    "key": "Prompts Engineering",
+    "desc": "Build-in prompts help to act AxiomAI as different character/role/persona",
+    "downloadUrl": "https://raw.githubusercontent.com/Miraz4300/AxiomAI/main/src/assets/prompts.json",
+    "url": "https://github.com/miraz4300/AxiomAI"
   }
 ]
