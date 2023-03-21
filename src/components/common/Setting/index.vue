@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import { computed, ref } from 'vue'
-import { NModal, NTabPane, NTabs } from 'naive-ui'
+import { NCard, NModal, NTabPane, NTabs } from 'naive-ui'
 import General from './General.vue'
 import About from './About.vue'
 import { SvgIcon } from '@/components/common'
