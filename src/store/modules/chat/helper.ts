@@ -11,6 +11,7 @@ export function defaultState(): Chat.ChatState {
     chat: [{ uuid, data: [] }],
   }
 }
+
 export function getLocalState(): Chat.ChatState {
   const localState = ss.get(LOCAL_NAME)
   return { ...defaultState(), ...localState }
