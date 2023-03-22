@@ -28,7 +28,7 @@ export function useScroll(): ScrollReturn {
   const scrollToBottomIfAtBottom = async () => {
     await nextTick()
     if (scrollRef.value) {
-      const threshold = 50 // Threshold, indicating the distance threshold from the scrollbar to the bottom
+      const threshold = 100 // Threshold, indicating the distance threshold from the scrollbar to the bottom
       const distanceToBottom = scrollRef.value.scrollHeight - scrollRef.value.scrollTop - scrollRef.value.clientHeight
       if (distanceToBottom <= threshold)
         scrollRef.value.scrollTop = scrollRef.value.scrollHeight
