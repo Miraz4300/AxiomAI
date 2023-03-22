@@ -15,7 +15,7 @@ function setupPlugins(env: ImportMetaEnv): PluginOption[] {
         short_name: 'AxiomAI',
         icons: [
           { src: 'axiomai-192x192.png', sizes: '192x192', type: 'image/png' },
-          { src: 'axiomai-192x192.png', sizes: '512x512', type: 'image/png' },
+          { src: 'axiomai-512x512.png', sizes: '512x512', type: 'image/png' },
         ],
       },
     })
