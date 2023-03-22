@@ -6,6 +6,8 @@ export interface UserInfo {
   avatar: string
   name: string
   description: string
+  axiomai_top_p: number
+  axiomai_memory: number
 }
 
 export interface UserState {
@@ -18,6 +20,8 @@ export function defaultSetting(): UserState {
       avatar: 'https://raw.githubusercontent.com/miraz4300/AxiomAI/master/src/assets/avatar.jpg',
       name: 'Miraz Hossain',
       description: 'Give a star on <a href="https://github.com/miraz4300/AxiomAI" class="text-blue-500" target="_blank" >GitHub</a>',
+      axiomai_top_p: 50,
+      axiomai_memory: 1,
     },
   }
 }
