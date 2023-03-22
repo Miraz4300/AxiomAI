@@ -62,6 +62,18 @@ export default {
     chatHistory: 'কথোপকথনের ইতিহাস',
     theme: 'থিম',
     language: 'Language',
+    memory_title: 'Memory',
+    memory_memo: 'The stronger the memory, the more context AxiomAI can remember during conversations.',
+    memory1: 'সাধারণ (৫ লগ)', // 5 logs
+    memory2: 'মধ্যম (২০ লগ)', // 20 logs
+    memory3: 'শক্তিশালী (সমস্ত লগ)', // all logs
+    top_p_title: 'চেতনা',
+    top_p1_info: 'বাস্তব এবং সংক্ষিপ্ত, নির্ভুলতা এবং প্রাসঙ্গিকতাকে অগ্রাধিকার',
+    top_p2_info: 'প্রতিক্রিয়াগুলিতে সঠিকতা এবং সৃজনশীলতার ভারসাম্য বজায় রাখা',
+    top_p3_info: 'ব্রেনস্টর্মিং মোড, সমৃদ্ধ তথ্য প্রদান করে',
+    top_p1: 'নির্ভুল',
+    top_p2: 'সমানুপাতিক',
+    top_p3: 'অনুসন্ধানমূলক',
     api: 'API',
     reverseProxy: 'Reverse Proxy',
     timeout: 'Timeout',
