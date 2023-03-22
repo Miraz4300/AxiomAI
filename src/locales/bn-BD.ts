@@ -52,10 +52,12 @@ export default {
   setting: {
     setting: 'সেটিংস',
     general: 'সাধারণ',
-    config: 'কনফিগার',
+    advanced: 'অতিরিক্ত',
+    about: 'পরিচয়',
     avatarLink: 'অবতার লিঙ্ক',
     name: 'নাম',
     description: 'বর্ণনা',
+    role: 'ভূমিকা',
     resetUserInfo: 'ব্যবহারকারীর তথ্য রিসেট করুন',
     chatHistory: 'কথোপকথনের ইতিহাস',
     theme: 'থিম',

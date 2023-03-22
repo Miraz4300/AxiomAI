@@ -52,10 +52,12 @@ export default {
   setting: {
     setting: 'Setting',
     general: 'General',
+    advanced: 'Advanced',
     about: 'About',
     avatarLink: 'Avatar Link',
     name: 'Name',
     description: 'Description',
+    role: 'Role',
     resetUserInfo: 'Reset UserInfo',
     chatHistory: 'ChatHistory',
     theme: 'Theme',
