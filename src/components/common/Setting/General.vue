@@ -54,7 +54,7 @@ const themeOptions: { label: string; key: Theme; icon: string }[] = [
 ]
 
 const languageOptions: { label: string; key: Language; value: Language }[] = [
-  // { label: 'বাংলা', key: 'bn-BD', value: 'bn-BD' },
+  { label: 'বাংলা', key: 'bn-BD', value: 'bn-BD' },
   { label: 'English', key: 'en-US', value: 'en-US' },
 ]
 
