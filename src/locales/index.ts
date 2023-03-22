@@ -1,7 +1,7 @@
 import type { App } from 'vue'
 import { createI18n } from 'vue-i18n'
 import enUS from './en-US'
-import bnBD from './bn-BD'
+import enGB from './bn-BD'
 import { useAppStoreWithOut } from '@/store/modules/app'
 import type { Language } from '@/store/modules/app/helper'
 
@@ -15,7 +15,7 @@ const i18n = createI18n({
   allowComposition: true,
   messages: {
     'en-US': enUS,
-    'bn-BD': bnBD,
+    'bn-BD': enGB,
   },
 })
 

@@ -1,5 +1,5 @@
 import { computed } from 'vue'
-import { enUS } from 'naive-ui'
+import { enGB, enUS } from 'naive-ui'
 import { useAppStore } from '@/store'
 import { setLocale } from '@/locales'
 
@@ -11,6 +11,9 @@ export function useLanguage() {
       case 'en-US':
         setLocale('en-US')
         return enUS
+      case 'bn-BD':
+        setLocale('bn-BD')
+        return enGB
       default:
         setLocale('en-US')
         return enUS
