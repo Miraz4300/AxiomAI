@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 import type { PluginOption } from 'vite'
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
