@@ -28,6 +28,7 @@ export default {
     unauthorizedTips: 'To gain access, kindly verify your credentials beforehand.',
   },
   chat: {
+    newChatButton: 'New Chat',
     placeholder: 'Ask me anything...(Shift + Enter = line break)',
     placeholderMobile: 'Ask me anything...',
     copy: 'Copy',
@@ -82,6 +83,7 @@ export default {
     balance: 'API Balance',
   },
   store: {
+    siderButton: 'Prompt Store',
     local: 'Local',
     online: 'Online',
     title: 'Title',

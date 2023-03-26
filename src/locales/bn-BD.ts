@@ -28,6 +28,7 @@ export default {
     unauthorizedTips: 'অননুমোদিত, আগে যাচাই করুন।',
   },
   chat: {
+    newChatButton: 'নতুন চ্যাট',
     placeholder: 'আমাকে যে কোন কিছু জিজ্ঞাসা করুন...(Shift + Enter = লাইন বিরতি)',
     placeholderMobile: 'আমাকে কিছু জিজ্ঞাসা করুন...',
     copy: 'Copy',
@@ -82,6 +83,7 @@ export default {
     balance: 'API Balance',
   },
   store: {
+    siderButton: 'প্রম্পট স্টোর',
     local: 'স্থানীয়',
     online: 'অনলাইন',
     title: 'শিরোনাম',
