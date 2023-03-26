@@ -3,7 +3,7 @@ export default {
     add: 'যোগ করুন',
     addSuccess: 'সফলভাবে যোগ করা হয়েছে',
     edit: 'সম্পাদনা',
-    editSuccess: 'সম্পাদনা সফল',
+    editSuccess: 'সম্পাদনা সফল হয়েছে',
     delete: 'মুছে ফেলুন',
     deleteSuccess: 'সফলভাবে মুছে ফেলা সম্পন্ন হয়েছে',
     save: 'সংরক্ষণ করুন',
@@ -15,7 +15,7 @@ export default {
     import: 'Import',
     importSuccess: 'Import সফল হয়েছে',
     clear: 'পরিষ্কার করুন',
-    clearSuccess: 'পরিষ্কার সফলভাবে সম্পন্ন হয়েছে',
+    clearSuccess: 'পরিষ্কার সফল হয়েছে',
     yes: 'হ্যাঁ',
     no: 'না',
     confirm: 'নিশ্চিত করুন',
@@ -25,7 +25,7 @@ export default {
     success: 'সফল হয়েছে',
     failed: 'ব্যর্থ হয়েছে',
     verify: 'যাচাই করুন',
-    unauthorizedTips: 'অননুমোদিত, আগে যাচাই করুন।',
+    unauthorizedTips: 'অ্যাক্সেস পেতে, দয়া করে আপনার শংসাপত্রগুলি আগে যাচাই করুন।',
   },
   chat: {
     newChatButton: 'নতুন চ্যাট',
@@ -37,7 +37,7 @@ export default {
     clearChat: 'চ্যাট পরিষ্কার করুন',
     clearChatConfirm: 'আপনি কি এই চ্যাটটি পরিষ্কার করতে নিশ্চিত?',
     exportImage: 'ছবি Export করুন',
-    exportImageConfirm: 'আপনি কি এই চ্যাটটি ছবিতে Export করার বিষয়ে নিশ্চিত??',
+    exportImageConfirm: 'আপনি কি এই চ্যাটটি ছবিতে Export করার বিষয়ে নিশ্চিত?',
     exportSuccess: 'Export সফল হয়েছে',
     exportFailed: 'Export ব্যর্থ হয়েছে',
     usingContext: 'প্রসঙ্গ মোড',
@@ -63,8 +63,8 @@ export default {
     chatHistory: 'কথোপকথনের ইতিহাস',
     theme: 'থিম',
     language: 'Language',
-    memory_title: 'Memory',
-    memory_memo: 'The stronger the memory, the more context AxiomAI can remember during conversations.',
+    memory_title: 'স্মৃতিশক্তি',
+    memory_memo: 'স্মৃতি যত শক্তিশালী, কথোপকথনের সময় AxiomAI আরও প্রসঙ্গ মনে করতে পারে।',
     memory1: 'সাধারণ (৫ লগ)', // 5 logs
     memory2: 'মধ্যম (২০ লগ)', // 20 logs
     memory3: 'শক্তিশালী (সমস্ত লগ)', // all logs
