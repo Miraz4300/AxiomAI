@@ -25,7 +25,7 @@ export default {
     success: 'সফল হয়েছে',
     failed: 'ব্যর্থ হয়েছে',
     verify: 'যাচাই করুন',
-    unauthorizedTips: 'অ্যাক্সেস পেতে, দয়া করে আপনার শংসাপত্রগুলি আগে যাচাই করুন।',
+    unauthorizedTips: 'অ্যাক্সেস পেতে, দয়া করে আপনার শংসাপত্র আগে যাচাই করুন।',
   },
   chat: {
     newChatButton: 'নতুন চ্যাট',
@@ -60,11 +60,11 @@ export default {
     description: 'বর্ণনা',
     role: 'ভূমিকা',
     resetUserInfo: 'ব্যবহারকারীর তথ্য রিসেট করুন',
-    chatHistory: 'কথোপকথনের ইতিহাস',
+    chatHistory: 'চ্যাট ইতিহাস',
     theme: 'থিম',
     language: 'Language',
     memory_title: 'স্মৃতিশক্তি',
-    memory_memo: 'স্মৃতি যত শক্তিশালী, কথোপকথনের সময় AxiomAI আরও প্রসঙ্গ মনে করতে পারে।',
+    memory_memo: 'স্মৃতিশক্তি যত শক্তিশালী, কথোপকথনের সময় AxiomAI তত বেশি প্রসঙ্গ মনে রাখতে পারে।',
     memory1: 'সাধারণ (৫ লগ)', // 5 logs
     memory2: 'মধ্যম (২০ লগ)', // 20 logs
     memory3: 'শক্তিশালী (সমস্ত লগ)', // all logs
