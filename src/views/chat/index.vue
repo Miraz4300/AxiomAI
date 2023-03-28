@@ -126,7 +126,7 @@ async function onConversation() {
   scrollToBottom()
 
   try {
-    const magicSplit = 'm2i1r1a1z2h2o2s2a1i1n1'
+    const magicSplit = 'm1i1r1a1z1h1o1s2a1i1n1t1h1i4s5i1s4a1s9i1l9l8y1s0plit'
     let renderText = ''
     let firstTime = true
     options.apiModel = defaultModel.value.key // dev:4300-01
@@ -264,7 +264,7 @@ async function onRegenerate(index: number) {
   )
 
   try {
-    const magicSplit = 'm2i1r1a1z2h2o2s2a1i1n1'
+    const magicSplit = 'm1i1r1a1z1h1o1s2a1i1n1t1h1i4s5i1s4a1s9i1l9l8y1s0plit'
     let renderText = ''
     let firstTime = true
     const fetchChatAPIOnce = async () => {
