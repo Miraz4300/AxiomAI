@@ -126,7 +126,9 @@ async function onConversation() {
   scrollToBottom()
 
   try {
-    let lastText = ''
+    const magicSplit = 'm1i1r1a1z1h1o1s2a1i1n1t1h1i4s5i1s4a1s9i1l9l8y1s0plit'
+    let renderText = ''
+    let firstTime = true
     options.apiModel = defaultModel.value.key // dev:4300-01
     const fetchChatAPIOnce = async () => {
       await fetchChatAPIProcess<Chat.ConversationResponse>({
@@ -137,42 +139,46 @@ async function onConversation() {
           const xhr = event.target
           const { responseText } = xhr
           // Always process the final line
-          const lastIndex = responseText.lastIndexOf('\n', responseText.length - 2)
-          let chunk = responseText
-          if (lastIndex !== -1)
-            chunk = responseText.substring(lastIndex)
-          try {
-            const data = JSON.parse(chunk)
-            updateChat(
-              +uuid,
-              dataSources.value.length - 1,
-              {
-                dateTime: new Date().toLocaleString(),
-                text: lastText + data.text ?? '',
-                inversion: false,
-                error: false,
-                loading: false,
-                conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id, apiModel: defaultModel.value.key },
-                requestOptions: { prompt: message, options: { ...options } },
-              },
-            )
-
-            if (openLongReply && data.detail.choices[0].finish_reason === 'length') {
-              options.parentMessageId = data.id
-              lastText = data.text
-              message = ''
-              return fetchChatAPIOnce()
+          const splitIndexBegin = responseText.search(magicSplit)
+          if (splitIndexBegin !== -1) {
+            const splitIndexEnd = splitIndexBegin + magicSplit.length
+            const firstChunk = responseText.substring(0, splitIndexBegin)
+            const deltaText = responseText.substring(splitIndexEnd)
+            try {
+              const data = JSON.parse(firstChunk)
+              if (firstTime) {
+                firstTime = false
+                renderText = data.text ?? ''
+              }
+              else {
+                renderText = deltaText ?? ''
+              }
+              updateChat(
+                +uuid,
+                dataSources.value.length - 1,
+                {
+                  dateTime: new Date().toLocaleString(),
+                  text: renderText,
+                  inversion: false,
+                  error: false,
+                  loading: false,
+                  conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id },
+                  requestOptions: { prompt: message, ...options },
+                },
+              )
+              if (openLongReply && data.detail.choices[0].finish_reason === 'length') {
+                options.parentMessageId = data.id
+                message = ''
+                return fetchChatAPIOnce()
+              }
             }
-
-            scrollToBottomIfAtBottom()
-          }
-          catch (error) {
-            //
+            catch (error) {
+              //
+            }
           }
         },
       })
     }
-
     await fetchChatAPIOnce()
   }
   catch (error: any) {
@@ -258,7 +264,9 @@ async function onRegenerate(index: number) {
   )
 
   try {
-    let lastText = ''
+    const magicSplit = 'm1i1r1a1z1h1o1s2a1i1n1t1h1i4s5i1s4a1s9i1l9l8y1s0plit'
+    let renderText = ''
+    let firstTime = true
     const fetchChatAPIOnce = async () => {
       await fetchChatAPIProcess<Chat.ConversationResponse>({
         prompt: message,
@@ -268,35 +276,42 @@ async function onRegenerate(index: number) {
           const xhr = event.target
           const { responseText } = xhr
           // Always process the final line
-          const lastIndex = responseText.lastIndexOf('\n', responseText.length - 2)
-          let chunk = responseText
-          if (lastIndex !== -1)
-            chunk = responseText.substring(lastIndex)
-          try {
-            const data = JSON.parse(chunk)
-            updateChat(
-              +uuid,
-              index,
-              {
-                dateTime: new Date().toLocaleString(),
-                text: lastText + data.text ?? '',
-                inversion: false,
-                error: false,
-                loading: false,
-                conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id, apiModel: defaultModel.value.key },
-                requestOptions: { prompt: message, ...options },
-              },
-            )
-
-            if (openLongReply && data.detail.choices[0].finish_reason === 'length') {
-              options.parentMessageId = data.id
-              lastText = data.text
-              message = ''
-              return fetchChatAPIOnce()
+          const splitIndexBegin = responseText.search(magicSplit)
+          if (splitIndexBegin !== -1) {
+            const splitIndexEnd = splitIndexBegin + magicSplit.length
+            const firstChunk = responseText.substring(0, splitIndexBegin)
+            const deltaText = responseText.substring(splitIndexEnd)
+            try {
+              const data = JSON.parse(firstChunk)
+              if (firstTime) {
+                firstTime = false
+                renderText = data.text ?? ''
+              }
+              else {
+                renderText = deltaText ?? ''
+              }
+              updateChat(
+                +uuid,
+                index,
+                {
+                  dateTime: new Date().toLocaleString(),
+                  text: renderText,
+                  inversion: false,
+                  error: false,
+                  loading: false,
+                  conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id },
+                  requestOptions: { prompt: message, ...options },
+                },
+              )
+              if (openLongReply && data.detail.choices[0].finish_reason === 'length') {
+                options.parentMessageId = data.id
+                message = ''
+                return fetchChatAPIOnce()
+              }
             }
-          }
-          catch (error) {
-            //
+            catch (error) {
+              //
+            }
           }
         },
       })
