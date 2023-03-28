@@ -37,7 +37,7 @@ function handleDelete(index: number, event?: MouseEvent | TouchEvent) {
     appStore.setSiderCollapsed(true)
 }
 
-const handleDeleteDebounce = debounce(handleDelete, 600)
+const handleDeleteDebounce = debounce(handleDelete, 500)
 
 function handleEnter({ uuid }: Chat.History, isEdit: boolean, event: KeyboardEvent) {
   event?.stopPropagation()
