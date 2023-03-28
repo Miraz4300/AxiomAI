@@ -34,27 +34,14 @@ onMounted(() => {
 <template>
   <NSpin :show="loading">
     <div class="p-4 space-y-4">
-      <h2 class="text-xl font-bold">
-        <center> AxiomAI </center>
+      <h2 class="text-2xl font-bold">
+        <center> A<span class="text-green-400">x</span>iomAI </center>
       </h2>
       <div class="p-2 space-y-2 rounded-md bg-neutral-200 dark:bg-stone-700">
-        <p>
-          <center>
-            This is an open source project based on the MIT License agreement.
-          </center>
-        </p>
-        <p>
-          <center>
-            If you find this project helpful, please give me a Star on
-            <a
-              class="text-blue-600 dark:text-blue-500"
-              href="https://github.com/miraz4300/AxiomAI"
-              target="_blank"
-            >
-              GitHub.
-            </a>
-          </center>
-        </p>
+        <center>
+          <p>This is an open source project based on the MIT License agreement.</p>
+          <p>If you find this project helpful, please give me a Star on <a class="text-blue-600 dark:text-blue-500" href="https://github.com/miraz4300/AxiomAI" target="_blank">GitHub.</a></p>
+        </center>
       </div>
       <p v-if="isChatGPTAPI">
         {{ $t("setting.api") }}：{{ config?.apiModel ?? '-' }} <br>

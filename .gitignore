@@ -8,7 +8,6 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-infrastructure
 .DS_Store
 dist
 dist-ssr
@@ -28,6 +27,3 @@ coverage
 *.njsproj
 *.sln
 *.sw?
-
-# Environment variables files
-/infrastructure/.env
