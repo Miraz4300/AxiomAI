@@ -3,7 +3,7 @@ import type { Ref } from 'vue'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { NAutoComplete, NButton, NInput, NSelect, useDialog, useMessage } from 'naive-ui'
+import { NAutoComplete, NButton, NInput, useDialog, useMessage } from 'naive-ui'
 import html2canvas from 'html2canvas'
 import { Message } from './components'
 import { useScroll } from './hooks/useScroll'
@@ -49,24 +49,6 @@ const promptStore = usePromptStore()
 // Use storeToRefs to ensure that the associative part can be re-rendered after the store is modified
 const { promptList: promptTemplate } = storeToRefs<any>(promptStore)
 
-// developed for showing image, additionally imported NSelect| image model - dev:4300-01
-const placeholder = ref<string>(isMobile.value ? t('chat.placeholderMobile') : t('chat.placeholder'))
-const modelSelectDisabled = ref<boolean>(false)
-const defaultModel = ref<Chat.SelectModel>({
-  label: 'GPT-3.5', key: 'gpt-3.5-turbo', value: 'gpt-3.5-turbo',
-})
-const modelOptions: { label: string; key: string; value: string }[] = [
-  { label: 'GPT-3', key: 'gpt-3.5-turbo', value: 'gpt-3.5-turbo' },
-  { label: 'Stable Diffusion', key: 'stable-diffusion', value: 'stable-diffusion' },
-]
-function handleSelectModel(model: string) {
-  defaultModel.value = modelOptions.find(obj => obj.key === model) || defaultModel.value
-  if (model === 'stable-diffusion')
-    placeholder.value = ' stable diffusion currently only supports English '
-  else
-    placeholder.value = isMobile.value ? t('chat.placeholderMobile') : t('chat.placeholder')
-}
-
 // If the page is refreshed for unknown reasons, the loading status will not be reset, so it can be reset manually.
 dataSources.value.forEach((item, index) => {
   if (item.loading)
@@ -110,7 +92,6 @@ async function onConversation() {
   if (lastContext && usingContext.value)
     options = { ...lastContext }
 
-  options.apiModel = defaultModel.value.key // dev:4300-01
   addChat(
     +uuid,
     {
@@ -127,7 +108,6 @@ async function onConversation() {
 
   try {
     let lastText = ''
-    options.apiModel = defaultModel.value.key // dev:4300-01
     const fetchChatAPIOnce = async () => {
       await fetchChatAPIProcess<Chat.ConversationResponse>({
         prompt: message,
@@ -152,7 +132,7 @@ async function onConversation() {
                 inversion: false,
                 error: false,
                 loading: false,
-                conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id, apiModel: defaultModel.value.key },
+                conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id },
                 requestOptions: { prompt: message, options: { ...options } },
               },
             )
@@ -236,7 +216,6 @@ async function onRegenerate(index: number) {
   let message = requestOptions?.prompt ?? ''
 
   let options: Chat.ConversationRequest = {}
-  options.apiModel = defaultModel.value.key // dev:4300-01
 
   if (requestOptions.options)
     options = { ...requestOptions.options }
@@ -283,7 +262,7 @@ async function onRegenerate(index: number) {
                 inversion: false,
                 error: false,
                 loading: false,
-                conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id, apiModel: defaultModel.value.key },
+                conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id },
                 requestOptions: { prompt: message, ...options },
               },
             )
@@ -455,6 +434,12 @@ const renderOption = (option: { label: string }) => {
   }
   return []
 }
+
+const placeholder = computed(() => {
+  if (isMobile.value)
+    return t('chat.placeholderMobile')
+  return t('chat.placeholder')
+})
 
 const buttonDisabled = computed(() => {
   return loading.value || !prompt.value || prompt.value.trim() === ''
@@ -643,17 +628,6 @@ catch (error) {
               <SvgIcon icon="ri:chat-history-line" />
             </span>
           </HoverButton>
-          <!-- s:dev:4300-01 -->
-          <div class="flex flex-wrap items-center gap-4">
-            <NSelect
-              style="width: 140px"
-              :value="defaultModel.label"
-              :options="modelOptions"
-              :disabled="modelSelectDisabled"
-              @update-value="value => handleSelectModel(value)"
-            />
-          </div>
-          <!-- e:dev:4300-01 -->
           <NAutoComplete v-model:value="prompt" :options="searchOptions" :render-label="renderOption">
             <template #default="{ handleInput, handleBlur, handleFocus }">
               <NInput
