@@ -109,7 +109,7 @@ async function onConversation() {
   try {
     let lastText = ''
     const fetchChatAPIOnce = async () => {
-      const { data } = await fetchChatAPIProcess<Chat.ConversationResponse>({
+      await fetchChatAPIProcess<Chat.ConversationResponse>({
         prompt: message,
         options,
         signal: controller.signal,
@@ -151,19 +151,7 @@ async function onConversation() {
           }
         },
       })
-      updateChat(
-        +uuid,
-        dataSources.value.length - 1,
-        {
-          dateTime: new Date().toLocaleString(),
-          text: lastText + data.text ?? '',
-          inversion: false,
-          error: false,
-          loading: false,
-          conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id },
-          requestOptions: { prompt: message, options: { ...options } },
-        },
-      )
+      updateChatSome(+uuid, dataSources.value.length - 1, { loading: false })
     }
 
     await fetchChatAPIOnce()
@@ -252,7 +240,7 @@ async function onRegenerate(index: number) {
   try {
     let lastText = ''
     const fetchChatAPIOnce = async () => {
-      const { data } = await fetchChatAPIProcess<Chat.ConversationResponse>({
+      await fetchChatAPIProcess<Chat.ConversationResponse>({
         prompt: message,
         options,
         signal: controller.signal,
@@ -292,19 +280,7 @@ async function onRegenerate(index: number) {
           }
         },
       })
-      updateChat(
-        +uuid,
-        index,
-        {
-          dateTime: new Date().toLocaleString(),
-          text: lastText + data.text ?? '',
-          inversion: false,
-          error: false,
-          loading: false,
-          conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id },
-          requestOptions: { prompt: message, ...options },
-        },
-      )
+      updateChatSome(+uuid, index, { loading: false })
     }
 
     await fetchChatAPIOnce()
