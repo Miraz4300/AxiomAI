@@ -131,7 +131,7 @@ async function onConversation() {
                 text: lastText + data.text ?? '',
                 inversion: false,
                 error: false,
-                loading: false,
+                loading: true,
                 conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id },
                 requestOptions: { prompt: message, options: { ...options } },
               },
@@ -151,6 +151,7 @@ async function onConversation() {
           }
         },
       })
+      updateChatSome(+uuid, dataSources.value.length - 1, { loading: false })
     }
 
     await fetchChatAPIOnce()
@@ -261,7 +262,7 @@ async function onRegenerate(index: number) {
                 text: lastText + data.text ?? '',
                 inversion: false,
                 error: false,
-                loading: false,
+                loading: true,
                 conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id },
                 requestOptions: { prompt: message, ...options },
               },
@@ -279,7 +280,9 @@ async function onRegenerate(index: number) {
           }
         },
       })
+      updateChatSome(+uuid, index, { loading: false })
     }
+
     await fetchChatAPIOnce()
   }
   catch (error: any) {
