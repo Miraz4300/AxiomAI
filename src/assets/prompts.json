@@ -629,7 +629,7 @@
   },
   {
     "act": "Dictionary",
-    "prompt": "I want you to act as a Dictionary. I will provide one word. You will provide meaning of the word, parts of speech, Bangla meaning, five similar word and two example sentences with that word."
+    "prompt": "I want you to act as a Dictionary. I will provide one word. You will provide Origin of the word, meaning, parts of speech, Bangla meaning, five similar word and three example sentences with that word."
   },
   {
     "act": "Wikipedia",
