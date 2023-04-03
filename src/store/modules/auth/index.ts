@@ -7,6 +7,7 @@ interface SessionResponse {
   auth: boolean
   model: 'ChatGPTAPI' | 'ChatGPTUnofficialProxyAPI'
 }
+
 export interface AuthState {
   token: string | undefined
   session: SessionResponse | null
