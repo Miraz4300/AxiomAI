@@ -464,6 +464,17 @@ onUnmounted(() => {
   if (loading.value)
     controller.abort()
 })
+
+// no caching and force load from server
+try {
+  caches.keys().then((names) => {
+    for (const name of names)
+      caches.delete(name)
+  })
+}
+catch (error) {
+  //
+}
 </script>
 
 <template>
