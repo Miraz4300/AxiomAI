@@ -128,7 +128,7 @@ async function onConversation() {
               dataSources.value.length - 1,
               {
                 dateTime: new Date().toLocaleString(),
-                text: lastText + (data.text ?? ' '),
+                text: lastText + (data.text ?? ''),
                 inversion: false,
                 error: false,
                 loading: true,
@@ -167,7 +167,7 @@ async function onConversation() {
           loading: false,
         },
       )
-      scrollToBottom()
+      scrollToBottomIfAtBottom()
       return
     }
 
@@ -282,7 +282,6 @@ async function onRegenerate(index: number) {
       })
       updateChatSome(+uuid, index, { loading: false })
     }
-
     await fetchChatAPIOnce()
   }
   catch (error: any) {
@@ -465,28 +464,21 @@ onUnmounted(() => {
   if (loading.value)
     controller.abort()
 })
-
-try {
-  caches.keys().then((names) => {
-    for (const name of names)
-      caches.delete(name)
-  })
-}
-catch (error) {
-  //
-}
 </script>
 
 <template>
   <div class="flex flex-col w-full h-full">
     <HeaderComponent
-      v-if="isMobile" :using-context="usingContext" @export="handleExport"
+      v-if="isMobile"
+      :using-context="usingContext"
+      @export="handleExport"
       @toggle-using-context="toggleUsingContext"
     />
     <main class="flex-1 overflow-hidden">
       <div id="scrollRef" ref="scrollRef" class="h-full overflow-hidden overflow-y-auto">
         <div
-          id="image-wrapper" class="w-full max-w-screen-xl m-auto dark:bg-[#101014]"
+          id="image-wrapper"
+          class="w-full max-w-screen-xl m-auto dark:bg-[#101014]"
           :class="[isMobile ? 'p-2' : 'p-4']"
         >
           <template v-if="!dataSources.length">
@@ -596,8 +588,14 @@ catch (error) {
           <template v-else>
             <div>
               <Message
-                v-for="(item, index) of dataSources" :key="index" :date-time="item.dateTime" :text="item.text"
-                :inversion="item.inversion" :error="item.error" :loading="item.loading" @regenerate="onRegenerate(index)"
+                v-for="(item, index) of dataSources"
+                :key="index"
+                :date-time="item.dateTime"
+                :text="item.text"
+                :inversion="item.inversion"
+                :error="item.error"
+                :loading="item.loading"
+                @regenerate="onRegenerate(index)"
                 @delete="handleDelete(index)"
               />
               <div class="sticky bottom-0 left-0 flex justify-center">
@@ -634,9 +632,15 @@ catch (error) {
           <NAutoComplete v-model:value="prompt" :options="searchOptions" :render-label="renderOption">
             <template #default="{ handleInput, handleBlur, handleFocus }">
               <NInput
-                ref="inputRef" v-model:value="prompt" type="textarea" :placeholder="placeholder"
-                :autosize="{ minRows: 1, maxRows: isMobile ? 4 : 8 }" @input="handleInput" @focus="handleFocus"
-                @blur="handleBlur" @keypress="handleEnter"
+                ref="inputRef"
+                v-model:value="prompt"
+                type="textarea"
+                :placeholder="placeholder"
+                :autosize="{ minRows: 1, maxRows: isMobile ? 4 : 8 }"
+                @input="handleInput"
+                @focus="handleFocus"
+                @blur="handleBlur"
+                @keypress="handleEnter"
               />
             </template>
           </NAutoComplete>
