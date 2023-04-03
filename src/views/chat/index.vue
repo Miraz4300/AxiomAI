@@ -465,7 +465,7 @@ onUnmounted(() => {
     controller.abort()
 })
 
-// no caching and force load from server
+/* no caching and force load from server | experimental feature
 try {
   caches.keys().then((names) => {
     for (const name of names)
@@ -475,6 +475,7 @@ try {
 catch (error) {
   //
 }
+*/
 </script>
 
 <template>
