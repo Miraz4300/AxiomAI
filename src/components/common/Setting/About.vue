@@ -35,7 +35,7 @@ onMounted(() => {
   <NSpin :show="loading">
     <div class="p-4 space-y-4">
       <h2 class="text-2xl font-bold">
-        <center> A<span class="text-green-400">x</span>iomAI </center>
+        <center> AxiomAI </center>
       </h2>
       <div class="p-2 space-y-2 rounded-md bg-neutral-200 dark:bg-stone-700">
         <center>
@@ -45,9 +45,10 @@ onMounted(() => {
       </div>
       <p v-if="isChatGPTAPI">
         {{ $t("setting.api") }}：{{ config?.apiModel ?? '-' }} <br>
-        Model：GPT-3.5-turbo <br>
+        Model：gpt-3.5-turbo <br>
         {{ $t("setting.balance") }}：{{ config?.balance ?? '-' }}
         <span class="text-xs text-neutral-400">({{ $t('setting.monthlyUsage') }})</span> <br>
+        Environment：Development
         Version：{{ pkg.version }} - preview
       </p>
     </div>
