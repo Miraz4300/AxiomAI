@@ -46,7 +46,8 @@ onMounted(() => {
       <p v-if="isChatGPTAPI">
         {{ $t("setting.api") }}：{{ config?.apiModel ?? '-' }} <br>
         Model：GPT-3.5-turbo <br>
-        {{ $t("setting.balance") }}：{{ config?.balance ?? '-' }} <br>
+        {{ $t("setting.balance") }}：{{ config?.balance ?? '-' }}
+        <span class="text-xs text-neutral-400">({{ $t('setting.monthlyUsage') }})</span> <br>
         Version：{{ pkg.version }} - preview
       </p>
     </div>
