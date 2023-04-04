@@ -48,7 +48,7 @@ onMounted(() => {
         Model：gpt-3.5-turbo <br>
         {{ $t("setting.balance") }}：{{ config?.balance ?? '-' }}
         <span class="text-xs text-neutral-400">({{ $t('setting.monthlyUsage') }})</span> <br>
-        Environment：Development
+        Environment：Development <br>
         Version：{{ pkg.version }} - preview
       </p>
     </div>
