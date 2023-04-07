@@ -5,11 +5,7 @@ import { fetchChatConfig } from '@/api'
 import pkg from '@/../package.json'
 import { useAuthStore } from '@/store'
 interface ConfigState {
-  timeoutMs?: number
-  reverseProxy?: string
   apiModel?: string
-  socksProxy?: string
-  httpsProxy?: string
   balance?: string
 }
 const authStore = useAuthStore()
@@ -40,7 +36,7 @@ onMounted(() => {
       <div class="p-2 space-y-2 rounded-md bg-neutral-200 dark:bg-stone-700">
         <center>
           <p>This is an open source project based on the MIT License agreement.</p>
-          <p>If you find this project helpful, please give me a Star on <a class="text-blue-600 dark:text-blue-500" href="https://github.com/miraz4300/AxiomAI" target="_blank">GitHub.</a></p>
+          <p>If you find this project helpful, please give a Star on <a class="text-blue-600 dark:text-blue-500" href="https://github.com/miraz4300/AxiomAI" target="_blank">GitHub.</a></p>
         </center>
       </div>
       <p v-if="isChatGPTAPI">
