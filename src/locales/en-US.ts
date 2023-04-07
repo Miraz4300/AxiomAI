@@ -63,18 +63,10 @@ export default {
     chatHistory: 'ChatHistory',
     theme: 'Theme',
     language: 'Language',
-    memory_title: 'Memory',
-    memory_memo: 'The stronger the memory, the more context AxiomAI can remember during conversations.',
-    memory1: 'Ordinary (5 logs)', // 5 logs
-    memory2: 'Medium (20 logs)', // 20 logs
-    memory3: 'Strongest (all logs)', // all logs
-    top_p_title: 'Conscious',
-    top_p1_info: 'Factual and concise, prioritizing accuracy and relevance',
-    top_p2_info: 'Balancing accuracy and creativity in responses',
-    top_p3_info: 'Brainstorming mode, tends to provide rich information',
-    top_p1: 'Accurate',
-    top_p2: 'Balanced',
-    top_p3: 'Exploratory',
+    temperature_info: 'Temperature controls how much the model relies on its training data versus generating new ideas.',
+    top_p_info: 'Top_p controls the probability mass the model considers when generating the next word or token.',
+    temperature: 'Temperature',
+    top_p: 'Top_p',
     api: 'API',
     reverseProxy: 'Reverse Proxy',
     timeout: 'Timeout',
