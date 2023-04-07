@@ -490,7 +490,7 @@ catch (error) {
       <div id="scrollRef" ref="scrollRef" class="h-full overflow-hidden overflow-y-auto">
         <div
           id="image-wrapper"
-          class="w-full max-w-screen-xl m-auto dark:bg-[#101014]"
+          class="w-full max-w-screen-xl m-auto dark:bg-[#0F0E0E]"
           :class="[isMobile ? 'p-2' : 'p-4']"
         >
           <template v-if="!dataSources.length">
@@ -504,11 +504,11 @@ catch (error) {
                     <h2 class="flex gap-3 items-center m-auto text-lg font-normal md:flex-col md:gap-2">
                       <svg stroke="currentColor" fill="none" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" /></svg>Examples
                     </h2><ul class="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-                      <button class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-emerald-700 dark:hover:bg-emerald-700">
+                      <button class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-[#ACACB2] dark:hover:bg-[#3E3F4B]">
                         "Explain quantum computing in simple terms" →
-                      </button><button class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-emerald-700 dark:hover:bg-emerald-700">
+                      </button><button class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-[#ACACB2] dark:hover:bg-[#3E3F4B]">
                         "Got any creative ideas for a 10 year old’s birthday?" →
-                      </button><button class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-emerald-700 dark:hover:bg-emerald-700">
+                      </button><button class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-[#ACACB2] dark:hover:bg-[#3E3F4B]">
                         "How do I make an HTTP request in Javascript?" →
                       </button>
                     </ul>
