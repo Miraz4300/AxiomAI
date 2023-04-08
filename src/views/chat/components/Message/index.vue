@@ -111,7 +111,7 @@ function handleRegenerate() {
         <div class="flex flex-col">
           <button
             v-if="!inversion"
-            class="mb-2 transition text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-300"
+            class="mb-2 transition text-gray-500 hover:text-neutral-900 dark:hover:text-neutral-200"
             @click="handleRegenerate"
           >
             <SvgIcon icon="ri:restart-line" />
@@ -122,7 +122,7 @@ function handleRegenerate() {
             :options="options"
             @select="handleSelect"
           >
-            <button class="transition text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-200">
+            <button class="transition text-gray-500 hover:text-neutral-900 dark:hover:text-neutral-200">
               <SvgIcon icon="ri:more-2-fill" />
             </button>
           </NDropdown>
