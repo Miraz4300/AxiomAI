@@ -24,7 +24,7 @@ export function useTheme() {
       return {
         common: {
           primaryColor: '#00B2DB',
-          primaryColorHover: '#009BBD',
+          primaryColorHover: '#00B2DB',
           primaryColorPressed: '#0083A0',
           primaryColorSuppl: '#009BBD',
           placeholderColor: 'rgba(255, 255, 255, 0.38)', // reflects on pre-text color

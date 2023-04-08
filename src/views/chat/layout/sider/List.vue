@@ -63,7 +63,7 @@ function isActive(uuid: number) {
         <div v-for="(item, index) of dataSources" :key="index">
           <a
             class="relative flex items-center gap-3 px-3 py-3 break-all border rounded-md cursor-pointer hover:bg-neutral-100 group dark:border-neutral-800 dark:hover:bg-[#24272e]"
-            :class="isActive(item.uuid) && ['border-[#0083A0]', 'bg-neutral-100', 'text-[#0083A0]', 'dark:text-[#00B2DB]', 'dark:bg-[#24272e]', 'dark:border-[#0083A0]', 'pr-14']"
+            :class="isActive(item.uuid) && ['border-[#0083A0]', 'bg-neutral-100', 'text-[#0083A0]', 'dark:text-[#00B2DB]', 'dark:bg-[#24272e]', 'dark:border-[#00B2DB]', 'pr-14']"
             @click="handleSelect(item)"
           >
             <span>
