@@ -6,7 +6,7 @@ import pkg from '@/../package.json'
 import { useAuthStore } from '@/store'
 interface ConfigState {
   apiModel?: string
-  balance?: string
+  usage?: string
 }
 const authStore = useAuthStore()
 const loading = ref(false)
@@ -42,8 +42,7 @@ onMounted(() => {
       <p v-if="isChatGPTAPI">
         {{ $t("setting.api") }}：{{ config?.apiModel ?? '-' }} <br>
         Model：gpt-3.5-turbo <br>
-        {{ $t("setting.balance") }}：{{ config?.balance ?? '-' }}
-        <span class="text-xs text-neutral-400">({{ $t('setting.monthlyUsage') }})</span> <br>
+        {{ $t("setting.monthlyUsage") }}：{{ config?.usage ?? '-' }} <br>
         Environment：Development <br>
         Version：{{ pkg.version }} - preview
       </p>
