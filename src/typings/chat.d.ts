@@ -1,6 +1,7 @@
 declare namespace Chat {
 
 	interface Chat {
+		uuid?: number
 		dateTime: string
 		text: string
 		inversion?: boolean
@@ -14,6 +15,8 @@ declare namespace Chat {
 		title: string
 		isEdit: boolean
 		uuid: number
+		loading?: boolean
+		all?: boolean
 	}
 
 	interface ChatState {

@@ -1,7 +1,8 @@
 <script setup lang='ts'>
-import { computed, ref } from 'vue'
-import { NButton, NInput, NModal, useMessage } from 'naive-ui'
-import { fetchVerify } from '@/api'
+import { computed, onMounted, ref } from 'vue'
+import { NButton, NInput, NModal, NTabPane, NTabs, useMessage } from 'naive-ui'
+import { useRoute, useRouter } from 'vue-router'
+import { fetchLogin, fetchRegister, fetchVerify, fetchVerifyAdmin } from '@/api'
 import { useAuthStore } from '@/store'
 import Icon403 from '@/icons/403.vue'
 
@@ -11,32 +12,73 @@ interface Props {
 
 defineProps<Props>()
 
+const route = useRoute()
+const router = useRouter()
 const authStore = useAuthStore()
 
 const ms = useMessage()
 
 const loading = ref(false)
-const token = ref('')
+const username = ref('')
+const password = ref('')
 
-const disabled = computed(() => !token.value.trim() || loading.value)
+const disabled = computed(() => !username.value.trim() || !password.value.trim() || loading.value)
 
-async function handleVerify() {
-  const secretKey = token.value.trim()
+const activeTab = ref('login')
 
-  if (!secretKey)
+const showConfirmPassword = ref(false)
+const confirmPassword = ref('')
+
+function handlePasswordInput() {
+  showConfirmPassword.value = password.value.trim() !== ''
+}
+
+const confirmPasswordStatus = computed(() => {
+  if (!password.value || !confirmPassword.value)
+    return undefined
+  return password.value !== confirmPassword.value ? 'error' : 'success'
+})
+
+onMounted(async () => {
+  const verifytoken = route.query.verifytoken as string
+  await handleVerify(verifytoken)
+  const verifytokenadmin = route.query.verifytokenadmin as string
+  await handleVerifyAdmin(verifytokenadmin)
+})
+
+async function handleVerify(verifytoken: string) {
+  if (!verifytoken)
     return
+  const secretKey = verifytoken.trim()
 
   try {
     loading.value = true
     await fetchVerify(secretKey)
-    authStore.setToken(secretKey)
-    ms.success('success')
-    window.location.reload()
+    ms.success('Verify successfully, Please wait for the admin to activate')
+    router.replace('/')
   }
   catch (error: any) {
     ms.error(error.message ?? 'error')
     authStore.removeToken()
-    token.value = ''
+  }
+  finally {
+    loading.value = false
+  }
+}
+
+async function handleVerifyAdmin(verifytoken: string) {
+  if (!verifytoken)
+    return
+  const secretKey = verifytoken.trim()
+
+  try {
+    loading.value = true
+    await fetchVerifyAdmin(secretKey)
+    ms.success('Activate successfully')
+    router.replace('/')
+  }
+  catch (error: any) {
+    ms.error(error.message ?? 'error')
   }
   finally {
     loading.value = false
@@ -46,7 +88,53 @@ async function handleVerify() {
 function handlePress(event: KeyboardEvent) {
   if (event.key === 'Enter' && !event.shiftKey) {
     event.preventDefault()
-    handleVerify()
+    handleLogin()
+  }
+}
+
+async function handleLogin() {
+  const name = username.value.trim()
+  const pwd = password.value.trim()
+
+  if (!name || !pwd)
+    return
+
+  try {
+    loading.value = true
+    const result = await fetchLogin(name, pwd)
+    await authStore.setToken(result.data.token)
+    ms.success('success')
+    router.go(0)
+  }
+  catch (error: any) {
+    ms.error(error.message ?? 'error')
+    password.value = ''
+  }
+  finally {
+    loading.value = false
+  }
+}
+
+async function handleRegister() {
+  const name = username.value.trim()
+  const pwd = password.value.trim()
+  const confirmPwd = confirmPassword.value.trim()
+
+  if (!name || !pwd || !confirmPwd || pwd !== confirmPwd) {
+    ms.error('Passwords don\'t match')
+    return
+  }
+
+  try {
+    loading.value = true
+    const result = await fetchRegister(name, pwd)
+    ms.success(result.message as string)
+  }
+  catch (error: any) {
+    ms.error(error.message ?? 'error')
+  }
+  finally {
+    loading.value = false
   }
 }
 </script>
@@ -64,16 +152,36 @@ function handlePress(event: KeyboardEvent) {
           </p>
           <Icon403 class="w-[200px] m-auto" />
         </header>
-        <NInput v-model:value="token" type="password" placeholder="" @keypress="handlePress" />
-        <NButton
-          block
-          type="primary"
-          :disabled="disabled"
-          :loading="loading"
-          @click="handleVerify"
-        >
-          {{ $t('common.verify') }}
-        </NButton>
+
+        <!-- Add Tabs -->
+        <NTabs v-model:value="activeTab" type="line">
+          <NTabPane name="login" :tab="$t('common.login')">
+            <NInput v-model:value="username" type="text" :placeholder="$t('common.email')" class="mb-2" />
+            <NInput v-model:value="password" type="password" :placeholder="$t('common.password')" class="mb-2" @keypress="handlePress" />
+
+            <NButton block type="primary" :disabled="disabled" :loading="loading" @click="handleLogin">
+              {{ $t('common.login') }}
+            </NButton>
+          </NTabPane>
+
+          <NTabPane v-if="authStore.session && authStore.session.allowRegister" name="register" :tab="$t('common.register')">
+            <NInput v-model:value="username" type="text" :placeholder="$t('common.email')" class="mb-2" />
+            <NInput v-model:value="password" type="password" :placeholder="$t('common.password')" class="mb-2" @input="handlePasswordInput" />
+            <NInput
+              v-if="showConfirmPassword"
+              v-model:value="confirmPassword"
+              type="password"
+              :placeholder="$t('common.passwordConfirm')"
+              class="mb-4"
+              :status="confirmPasswordStatus"
+            />
+
+            <NButton block type="primary" :disabled="disabled || password !== confirmPassword" :loading="loading" @click="handleRegister">
+              {{ $t('common.register') }}
+            </NButton>
+          </NTabPane>
+        </NTabs>
+        <!-- End Tabs -->
       </div>
     </div>
   </NModal>

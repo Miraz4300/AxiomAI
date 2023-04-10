@@ -1,9 +1,10 @@
 <script setup lang='ts'>
 import type { Ref } from 'vue'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { NAutoComplete, NButton, NInput, useDialog, useMessage } from 'naive-ui'
+import type { MessageReactive } from 'naive-ui'
+import { NAutoComplete, NButton, NInput, NSpin, useDialog, useMessage } from 'naive-ui'
 import html2canvas from 'html2canvas'
 import { Message } from './components'
 import { useScroll } from './hooks/useScroll'
@@ -16,6 +17,7 @@ import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { useChatStore, usePromptStore } from '@/store'
 import { fetchChatAPIProcess } from '@/api'
 import { t } from '@/locales'
+import { debounce } from '@/utils/functions/debounce'
 
 let controller = new AbortController()
 
@@ -31,7 +33,7 @@ useCopyCode()
 
 const { isMobile } = useBasicLayout()
 const { addChat, updateChat, updateChatSome, getChatByUuidAndIndex } = useChat()
-const { scrollRef, scrollToBottom, scrollToBottomIfAtBottom } = useScroll()
+const { scrollRef, scrollToBottom, scrollToBottomIfAtBottom, scrollTo } = useScroll()
 const { usingContext, toggleUsingContext } = useUsingContext()
 
 const { uuid } = route.params as { uuid: string }
@@ -40,8 +42,13 @@ const dataSources = computed(() => chatStore.getChatByUuid(+uuid))
 const conversationList = computed(() => dataSources.value.filter(item => (!item.inversion && !!item.conversationOptions)))
 
 const prompt = ref<string>('')
+const firstLoading = ref<boolean>(false)
 const loading = ref<boolean>(false)
 const inputRef = ref<Ref | null>(null)
+
+let loadingms: MessageReactive
+let allmsg: MessageReactive
+let prevScrollTop: number
 
 // Add PromptStore
 const promptStore = usePromptStore()
@@ -70,9 +77,11 @@ async function onConversation() {
 
   controller = new AbortController()
 
+  const chatUuid = Date.now()
   addChat(
     +uuid,
     {
+      uuid: chatUuid,
       dateTime: new Date().toLocaleString(),
       text: message,
       inversion: true,
@@ -95,6 +104,7 @@ async function onConversation() {
   addChat(
     +uuid,
     {
+      uuid: chatUuid,
       dateTime: new Date().toLocaleString(),
       text: '',
       loading: true,
@@ -110,6 +120,8 @@ async function onConversation() {
     let lastText = ''
     const fetchChatAPIOnce = async () => {
       await fetchChatAPIProcess<Chat.ConversationResponse>({
+        roomId: +uuid,
+        uuid: chatUuid,
         prompt: message,
         options,
         signal: controller.signal,
@@ -222,7 +234,7 @@ async function onRegenerate(index: number) {
     options = { ...requestOptions.options }
 
   loading.value = true
-
+  const chatUuid = dataSources.value[index].uuid
   updateChat(
     +uuid,
     index,
@@ -241,6 +253,9 @@ async function onRegenerate(index: number) {
     let lastText = ''
     const fetchChatAPIOnce = async () => {
       await fetchChatAPIProcess<Chat.ConversationResponse>({
+        roomId: +uuid,
+        uuid: chatUuid || Date.now(),
+        regenerate: true,
         prompt: message,
         options,
         signal: controller.signal,
@@ -411,6 +426,40 @@ function handleStop() {
   }
 }
 
+async function loadMoreMessage(event: any) {
+  const chatIndex = chatStore.chat.findIndex(d => d.uuid === +uuid)
+  if (chatIndex <= -1)
+    return
+
+  const scrollPosition = event.target.scrollHeight - event.target.scrollTop
+
+  const lastId = chatStore.chat[chatIndex].data[0].uuid
+  await chatStore.syncChat({ uuid: +uuid } as Chat.History, lastId, () => {
+    loadingms && loadingms.destroy()
+    nextTick(() => scrollTo(event.target.scrollHeight - scrollPosition))
+  }, () => {
+    loadingms = ms.loading(
+      'Loading...', {
+        duration: 0,
+      },
+    )
+  }, () => {
+    allmsg && allmsg.destroy()
+    allmsg = ms.warning('No more', {
+      duration: 1000,
+    })
+  })
+}
+
+const handleLoadMoreMessage = debounce(loadMoreMessage, 300)
+
+async function handleScroll(event: any) {
+  const scrollTop = event.target.scrollTop
+  if (scrollTop < 50 && (scrollTop < prevScrollTop || prevScrollTop === undefined))
+    handleLoadMoreMessage(event)
+  prevScrollTop = scrollTop
+}
+
 // Optimizable section
 // Search option calculation, here using value as an index item, so when there is a duplicate value rendering exception (multiple simultaneous appearance of the selected effect)
 // Ideally it should be the key as the index item, but the official renderOption will have problems, so you need the value inverse renderLabel to achieve
@@ -455,27 +504,22 @@ const footerClass = computed(() => {
 })
 
 onMounted(() => {
-  scrollToBottom()
-  if (inputRef.value && !isMobile.value)
-    inputRef.value?.focus()
+  firstLoading.value = true
+  debounce(() => {
+    // Direct brush Very low probability of not requesting
+    chatStore.syncChat({ uuid: Number(uuid) } as Chat.History, undefined, () => {
+      firstLoading.value = false
+      scrollToBottom()
+      if (inputRef.value && !isMobile.value)
+        inputRef.value?.focus()
+    })
+  }, 200)()
 })
 
 onUnmounted(() => {
   if (loading.value)
     controller.abort()
 })
-
-/* no caching and force load from server | experimental feature
-try {
-  caches.keys().then((names) => {
-    for (const name of names)
-      caches.delete(name)
-  })
-}
-catch (error) {
-  //
-}
-*/
 </script>
 
 <template>
@@ -487,84 +531,86 @@ catch (error) {
       @toggle-using-context="toggleUsingContext"
     />
     <main class="flex-1 overflow-hidden">
-      <div id="scrollRef" ref="scrollRef" class="h-full overflow-hidden overflow-y-auto">
+      <div id="scrollRef" ref="scrollRef" class="h-full overflow-hidden overflow-y-auto" @scroll="handleScroll">
         <div
           id="image-wrapper"
           class="w-full max-w-screen-xl m-auto dark:bg-[#0F0E0E]"
           :class="[isMobile ? 'p-2' : 'p-4']"
         >
-          <template v-if="!dataSources.length">
-            <div class="flex items-center justify-center mt-2 text-center text-neutral-300">
-              <!-- AxiomAI is being introduced. -->
-              <div class="text-gray-800 w-full md:max-w-2xl lg:max-w-3xl md:h-full md:flex md:flex-col px-6 dark:text-gray-100">
-                <h1 class="text-4xl font-semibold text-center mt-6 sm:mt-[20vh] ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center">
-                  AxiomAI-preview
-                </h1><div class="md:flex items-start text-center gap-3.5">
-                  <div class="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
-                    <h2 class="flex gap-3 items-center m-auto text-lg font-normal md:flex-col md:gap-2">
-                      <svg stroke="currentColor" fill="none" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" /></svg>Examples
-                    </h2><ul class="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-                      <button class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-[#ACACB2] dark:hover:bg-[#3E3F4B]">
-                        "Explain quantum computing in simple terms" →
-                      </button><button class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-[#ACACB2] dark:hover:bg-[#3E3F4B]">
-                        "Got any creative ideas for a 10 year old’s birthday?" →
-                      </button><button class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-[#ACACB2] dark:hover:bg-[#3E3F4B]">
-                        "How do I make an HTTP request in Javascript?" →
-                      </button>
-                    </ul>
-                  </div><div class="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
-                    <h2 class="flex gap-3 items-center m-auto text-lg font-normal md:flex-col md:gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>Capabilities
-                    </h2><ul class="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-                      <li class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">
-                        Remembers what user said earlier in the conversation
-                      </li><li class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">
-                        Allows user to provide follow-up corrections
-                      </li><li class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">
-                        Trained to decline inappropriate requests
-                      </li>
-                    </ul>
-                  </div><div class="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
-                    <h2 class="flex gap-3 items-center m-auto text-lg font-normal md:flex-col md:gap-2">
-                      <svg stroke="currentColor" fill="none" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>Limitations
-                    </h2><ul class="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-                      <li class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">
-                        May occasionally generate incorrect information
-                      </li><li class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">
-                        May occasionally produce harmful instructions or biased content
-                      </li><li class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">
-                        Limited knowledge of world and events after 2021
-                      </li>
-                    </ul>
+          <NSpin :show="firstLoading">
+            <template v-if="!dataSources.length">
+              <div class="flex items-center justify-center mt-2 text-center text-neutral-300">
+                <!-- AxiomAI is being introduced. -->
+                <div class="text-gray-800 w-full md:max-w-2xl lg:max-w-3xl md:h-full md:flex md:flex-col px-6 dark:text-gray-100">
+                  <h1 class="text-4xl font-semibold text-center mt-6 sm:mt-[20vh] ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center">
+                    AxiomAI-preview
+                  </h1><div class="md:flex items-start text-center gap-3.5">
+                    <div class="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
+                      <h2 class="flex gap-3 items-center m-auto text-lg font-normal md:flex-col md:gap-2">
+                        <svg stroke="currentColor" fill="none" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" /></svg>Examples
+                      </h2><ul class="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
+                        <button class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-[#ACACB2] dark:hover:bg-[#3E3F4B]">
+                          "Explain quantum computing in simple terms" →
+                        </button><button class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-[#ACACB2] dark:hover:bg-[#3E3F4B]">
+                          "Got any creative ideas for a 10 year old’s birthday?" →
+                        </button><button class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-[#ACACB2] dark:hover:bg-[#3E3F4B]">
+                          "How do I make an HTTP request in Javascript?" →
+                        </button>
+                      </ul>
+                    </div><div class="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
+                      <h2 class="flex gap-3 items-center m-auto text-lg font-normal md:flex-col md:gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>Capabilities
+                      </h2><ul class="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
+                        <li class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">
+                          Remembers what user said earlier in the conversation
+                        </li><li class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">
+                          Allows user to provide follow-up corrections
+                        </li><li class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">
+                          Trained to decline inappropriate requests
+                        </li>
+                      </ul>
+                    </div><div class="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
+                      <h2 class="flex gap-3 items-center m-auto text-lg font-normal md:flex-col md:gap-2">
+                        <svg stroke="currentColor" fill="none" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>Limitations
+                      </h2><ul class="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
+                        <li class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">
+                          May occasionally generate incorrect information
+                        </li><li class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">
+                          May occasionally produce harmful instructions or biased content
+                        </li><li class="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">
+                          Limited knowledge of world and events after 2021
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
-              </div>
               <!-- End of introduction. -->
-            </div>
-          </template>
-          <template v-else>
-            <div>
-              <Message
-                v-for="(item, index) of dataSources"
-                :key="index"
-                :date-time="item.dateTime"
-                :text="item.text"
-                :inversion="item.inversion"
-                :error="item.error"
-                :loading="item.loading"
-                @regenerate="onRegenerate(index)"
-                @delete="handleDelete(index)"
-              />
-              <div class="sticky bottom-0 left-0 flex justify-center">
-                <NButton v-if="loading" type="warning" @click="handleStop">
-                  <template #icon>
-                    <SvgIcon icon="ri:stop-circle-line" />
-                  </template>
-                  Stop Responding
-                </NButton>
               </div>
-            </div>
-          </template>
+            </template>
+            <template v-else>
+              <div>
+                <Message
+                  v-for="(item, index) of dataSources"
+                  :key="index"
+                  :date-time="item.dateTime"
+                  :text="item.text"
+                  :inversion="item.inversion"
+                  :error="item.error"
+                  :loading="item.loading"
+                  @regenerate="onRegenerate(index)"
+                  @delete="handleDelete(index)"
+                />
+                <div class="sticky bottom-0 left-0 flex justify-center">
+                  <NButton v-if="loading" type="warning" @click="handleStop">
+                    <template #icon>
+                      <SvgIcon icon="ri:stop-circle-line" />
+                    </template>
+                    Stop Responding
+                  </NButton>
+                </div>
+              </div>
+            </template>
+          </NSpin>
         </div>
       </div>
     </main>
