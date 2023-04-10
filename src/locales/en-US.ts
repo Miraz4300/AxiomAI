@@ -28,7 +28,7 @@ export default {
     register: 'Register',
     login: 'Login',
     notLoggedIn: 'Login / Register',
-    logOut: 'Login Out',
+    logOut: 'Logout',
     unauthorizedTips: 'To gain access, kindly verify your credentials beforehand.',
     email: 'Email',
     password: 'Password',

@@ -50,7 +50,7 @@ export function fetchChatAPIProcess<T = any>(
 
   return post<T>({
     url: '/chat-process',
-    data,
+    data: { roomId: params.roomId, uuid: params.uuid, regenerate: params.regenerate || false, prompt: params.prompt, options: params.options, systemMessage: settingStore.systemMessage, ...data },
     signal: params.signal,
     onDownloadProgress: params.onDownloadProgress,
   })

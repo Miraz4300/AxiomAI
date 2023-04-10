@@ -10,6 +10,7 @@ const ms = useMessage()
 const systemMessage = ref(settingStore.systemMessage ?? '')
 const temperature = ref(settingStore.temperature ?? 0.5)
 const top_p = ref(settingStore.top_p ?? 1)
+
 function updateSettings(options: Partial<SettingsState>) {
   settingStore.updateSetting(options)
   ms.success(t('common.success'))
