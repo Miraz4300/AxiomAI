@@ -32,6 +32,12 @@ const userInfo = computed(() => userStore.userInfo)
       <h2 v-else class="overflow-hidden font-bold text-md text-ellipsis whitespace-nowrap">
         {{ $t('common.notLoggedIn') }}
       </h2>
+      <p class="overflow-hidden text-xs text-gray-500 text-ellipsis whitespace-nowrap">
+        <span
+          v-if="isString(userInfo.description) && userInfo.description !== ''"
+          v-html="userInfo.description"
+        />
+      </p>
     </div>
   </div>
 </template>
