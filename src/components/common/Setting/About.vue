@@ -30,7 +30,7 @@ import pkg from '@/../package.json'
         </p>
       </div>
       <div class="col-span-1 flex justify-end">
-        <img src="src/assets/bKash.svg" alt="Donate with bKash" class="w-40 border-2 border-black">
+        <img src="@/assets/bKash.svg" alt="Donate with bKash" class="w-40 border-2 border-black">
       </div>
     </div>
   </div>
