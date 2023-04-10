@@ -16,7 +16,7 @@ export interface UserState {
 export function defaultSetting(): UserState {
   return {
     userInfo: {
-      avatar: 'https://raw.githubusercontent.com/miraz4300/AxiomAI/master/src/assets/avatar.jpg',
+      avatar: '',
       name: '',
       description: '',
       root: false,
