@@ -8,7 +8,14 @@ function setupPlugins(env: ImportMetaEnv): PluginOption[] {
   return [
     vue(),
     env.VITE_GLOB_APP_PWA === 'true' && VitePWA({
-      injectRegister: 'auto',
+      registerType: 'autoUpdate',
+      workbox: {
+        clientsClaim: true,
+        skipWaiting: true,
+      },
+      devOptions: {
+        enabled: true,
+      },
       manifest: {
         name: 'AxiomAI',
         short_name: 'AxiomAI',
