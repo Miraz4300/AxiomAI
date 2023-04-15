@@ -13,9 +13,6 @@ function setupPlugins(env: ImportMetaEnv): PluginOption[] {
         clientsClaim: true,
         skipWaiting: true,
       },
-      devOptions: {
-        enabled: true,
-      },
       manifest: {
         name: 'AxiomAI',
         short_name: 'AxiomAI',
