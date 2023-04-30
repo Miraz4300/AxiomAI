@@ -34,6 +34,7 @@ export default {
     copy: 'Copy',
     copied: 'Copied',
     copyCode: 'Copy Code',
+    copyfail: 'Copy failed',
     clearChat: 'চ্যাট পরিষ্কার করুন',
     clearChatConfirm: 'আপনি কি এই চ্যাটটি পরিষ্কার করতে নিশ্চিত?',
     exportImage: 'ছবি Export করুন',
