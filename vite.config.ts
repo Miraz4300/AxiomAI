@@ -4,11 +4,15 @@ import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
 
-function setupPlugins(env: ImportMetaEnv): PluginOption[] {
+function setupPlugins({ VITE_GLOB_APP_PWA }: ImportMetaEnv): PluginOption[] {
   return [
     vue(),
-    env.VITE_GLOB_APP_PWA === 'true' && VitePWA({
-      injectRegister: 'auto',
+    VITE_GLOB_APP_PWA === 'true' && VitePWA({
+      registerType: 'autoUpdate',
+      workbox: {
+        clientsClaim: true,
+        skipWaiting: true,
+      },
       manifest: {
         name: 'AxiomAI',
         short_name: 'AxiomAI',
@@ -27,9 +31,7 @@ export default defineConfig((env) => {
 
   return {
     resolve: {
-      alias: {
-        '@': path.resolve(process.cwd(), 'src'),
-      },
+      alias: { '@': path.resolve(process.cwd(), 'src') },
     },
     plugins: setupPlugins(viteEnv),
     server: {
@@ -47,9 +49,7 @@ export default defineConfig((env) => {
     build: {
       reportCompressedSize: false,
       sourcemap: false,
-      commonjsOptions: {
-        ignoreTryCatch: false,
-      },
+      commonjsOptions: { ignoreTryCatch: false },
     },
   }
 })
